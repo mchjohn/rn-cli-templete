@@ -13,11 +13,10 @@
   useEffect,
   useState,
 } from 'react';
-// import AppLoading from 'expo-app-loading';
+// import ActivityIndicator from 'react-native';
 import { ActivityIndicator, useColorScheme } from 'react-native';
 
 import { useStorage } from '../hooks/useStorage';
-// import { useCustomFonts } from '../hooks/useCustomFonts';
 
 import { AuthData } from '../interfaces/auth-data';
 import { appStorageAuthDataKey } from '../constants/auth';
@@ -47,7 +46,6 @@ const AppContext = createContext({} as AppContextProps);
 const AppContextProvider = ({ children }: AppContextProviderProps) => {
   const deviceTheme = useColorScheme();
   const storage = useStorage();
-  // const { isLoading: isLoadingFonts } = useCustomFonts();
   /**
    * Loading states starts with true and become false when the action is completed.
    * It is used to show a splash screen while the app is loading.
@@ -87,8 +85,6 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
       const response = (await storage.getItem(appStorageAuthDataKey)) as AuthData;
 
       if (response) {
-        // api.defaults.headers.authorization = `Bearer ${response.token}`;
-
         setAuthData(response);
       }
       /** else: user is not logged and must be redirected to login screen */
@@ -97,7 +93,6 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
     }
 
     if (!loginInProcess) {
-      // TODO - testar sem essa condição
       loadAuthData();
     }
   }, [loginInProcess]); // eslint-disable-line
@@ -105,7 +100,6 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
   if (isLoadingTheme || isLoadingAuth) {
     /**
      * If something is loading, show app splash screen.
-     * More info: https://docs.expo.dev/versions/latest/sdk/app-loading/
      */
     return <ActivityIndicator size="small" color="#0000ff" />;
   }
